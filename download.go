@@ -48,13 +48,14 @@ func download(ctx context.Context, url string) ([]string, error) {
 		eg.Go(func() error {
 			minRange, maxRange := downloadRange(i, divNum, divSize, sumSize)
 			select {
-			case <-ctx.Done():
+			case <-ctx.Done(): // Receive cancel and do nothing
 			default:
 				downloadedFiles[i], err = divDownload(url, minRange, maxRange)
 			}
 			return err
 		})
 	}
+	// Wait() catch error by Go() if occured, and run the cancellation
 	if err := eg.Wait(); err != nil {
 		return nil, err
 	}
