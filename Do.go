@@ -10,11 +10,11 @@ import (
 	"github.com/ryojiroakiyama/fileio"
 )
 
-//ParallelDownLoadMax is the maximum data size
+//EachDownLoadMaxLen is the maximum data size
 //that can be downloaded
 //by one of the processes running in parallel.
 const (
-	ParallelDownLoadMax = 1000
+	EachDownLoadMaxLen = 1000
 )
 
 //Do starts the download from the URL passed as a argument.

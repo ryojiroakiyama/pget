@@ -52,10 +52,10 @@ func dataLengthToDownload(url string) (int64, error) {
 }
 
 func numOfRoutine(datasize int64) int {
-	if datasize < ParallelDownLoadMax {
+	if datasize < EachDownLoadMaxLen {
 		return 1
 	}
-	return 1 + numOfRoutine(datasize/ParallelDownLoadMax)
+	return 1 + numOfRoutine(datasize/EachDownLoadMaxLen)
 }
 
 func rangeToDownload(index int, numDiv int, sizeDiv int64, sizeSum int64) (int64, int64) {
