@@ -3,7 +3,7 @@ package pget
 import (
 	"context"
 	"fmt"
-	"github.com/ryojiroakiyama/file"
+	"github.com/ryojiroakiyama/fileio"
 	"io"
 	"net/http"
 
@@ -30,7 +30,7 @@ func divDownload(url string, minRange int64, maxRange int64) (string, error) {
 		return "", err
 	}
 	defer content.Close()
-	return file.ToTmpFile(content)
+	return fileio.GenTmpFile(content)
 }
 
 func download(ctx context.Context, url string) ([]string, error) {

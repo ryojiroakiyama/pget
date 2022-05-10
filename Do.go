@@ -4,7 +4,7 @@ package pget
 import (
 	"context"
 	"fmt"
-	"github.com/ryojiroakiyama/file"
+	"github.com/ryojiroakiyama/fileio"
 	"os"
 	"strings"
 )
@@ -31,7 +31,7 @@ func Do(url string) error {
 			}
 		}
 	}()
-	if err := file.BindFiles(divfiles, url[strings.LastIndex(url, "/")+1:]); err != nil {
+	if err := fileio.BindFiles(divfiles, url[strings.LastIndex(url, "/")+1:]); err != nil {
 		return fmt.Errorf("Do: %v", err)
 	}
 	return nil
