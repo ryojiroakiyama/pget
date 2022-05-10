@@ -3,19 +3,25 @@ package pget
 import (
 	"context"
 	"fmt"
-	"github.com/ryojiroakiyama/fileio"
 	"io"
 	"net/http"
+	"strconv"
+
+	"github.com/ryojiroakiyama/fileio"
 
 	"golang.org/x/sync/errgroup"
 )
 
-func rangeRequest(url string, minRange int64, maxRange int64) (io.ReadCloser, error) {
+func rangeValue(start int64, end int64) string {
+	return "bytes=" + strconv.FormatInt(start, 10) + "-" + strconv.FormatInt(end, 10)
+}
+
+func requestWithRange(url string, minRange int64, maxRange int64) (io.ReadCloser, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("fail to send request: %v", err)
 	}
-	req.Header.Add("Range", RangeValue(minRange, maxRange-1))
+	req.Header.Add("Range", rangeValue(minRange, maxRange-1))
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -25,7 +31,7 @@ func rangeRequest(url string, minRange int64, maxRange int64) (io.ReadCloser, er
 }
 
 func divDownload(url string, minRange int64, maxRange int64) (string, error) {
-	content, err := rangeRequest(url, minRange, maxRange)
+	content, err := requestWithRange(url, minRange, maxRange)
 	if err != nil {
 		return "", err
 	}
@@ -35,18 +41,18 @@ func divDownload(url string, minRange int64, maxRange int64) (string, error) {
 
 func download(ctx context.Context, url string) ([]string, error) {
 	eg, ctx := errgroup.WithContext(ctx)
-	sumSize, err := DataLength(url)
+	sumSize, err := dataLengthToDownload(url)
 	if err != nil {
 		return nil, err
 	}
-	divNum := NumDivideRange(sumSize)
+	divNum := numOfRangeToDownload(sumSize)
 	divSize := sumSize / int64(divNum)
 	downloadedFiles := make([]string, divNum)
 	for i := 0; i < divNum; i++ {
 		i := i
 		err := err
 		eg.Go(func() error {
-			minRange, maxRange := downloadRange(i, divNum, divSize, sumSize)
+			minRange, maxRange := rangeToDownload(i, divNum, divSize, sumSize)
 			select {
 			case <-ctx.Done(): // Receive cancel and do nothing
 			default:
