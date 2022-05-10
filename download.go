@@ -3,41 +3,12 @@ package pget
 import (
 	"context"
 	"fmt"
-	"io"
 	"net/http"
-	"strconv"
 
 	"github.com/ryojiroakiyama/fileio"
 
 	"golang.org/x/sync/errgroup"
 )
-
-func rangeValue(start int64, end int64) string {
-	return "bytes=" + strconv.FormatInt(start, 10) + "-" + strconv.FormatInt(end, 10)
-}
-
-func requestWithRange(url string, minRange int64, maxRange int64) (io.ReadCloser, error) {
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, fmt.Errorf("fail to send request: %v", err)
-	}
-	req.Header.Add("Range", rangeValue(minRange, maxRange-1))
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("fail to get response: %v", err)
-	}
-	return resp.Body, nil
-}
-
-func divDownload(url string, minRange int64, maxRange int64) (string, error) {
-	content, err := requestWithRange(url, minRange, maxRange)
-	if err != nil {
-		return "", err
-	}
-	defer content.Close()
-	return fileio.GenTmpFile(content)
-}
 
 func download(ctx context.Context, url string) ([]string, error) {
 	eg, ctx := errgroup.WithContext(ctx)
@@ -45,7 +16,7 @@ func download(ctx context.Context, url string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	divNum := numOfRangeToDownload(sumSize)
+	divNum := numOfRoutine(sumSize)
 	divSize := sumSize / int64(divNum)
 	downloadedFiles := make([]string, divNum)
 	for i := 0; i < divNum; i++ {
@@ -66,4 +37,41 @@ func download(ctx context.Context, url string) ([]string, error) {
 		return nil, err
 	}
 	return downloadedFiles, nil
+}
+
+func dataLengthToDownload(url string) (int64, error) {
+	resp, err := http.Head(url)
+	if err != nil {
+		return 0, fmt.Errorf("DataLength: %v", err)
+	}
+	length := resp.ContentLength
+	if length <= 0 {
+		return 0, fmt.Errorf("DataLength: unknown content length")
+	}
+	return length, nil
+}
+
+func numOfRoutine(datasize int64) int {
+	if datasize < ParallelDownLoadMax {
+		return 1
+	}
+	return 1 + numOfRoutine(datasize/ParallelDownLoadMax)
+}
+
+func rangeToDownload(index int, numDiv int, sizeDiv int64, sizeSum int64) (int64, int64) {
+	minRange := sizeDiv * int64(index)
+	maxRange := sizeDiv * int64(index+1)
+	if index == numDiv-1 {
+		maxRange += sizeSum - maxRange
+	}
+	return minRange, maxRange
+}
+
+func divDownload(url string, minRange int64, maxRange int64) (string, error) {
+	content, err := requestWithRange(url, minRange, maxRange)
+	if err != nil {
+		return "", err
+	}
+	defer content.Close()
+	return fileio.GenTmpFile(content)
 }

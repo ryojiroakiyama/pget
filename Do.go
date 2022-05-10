@@ -4,16 +4,17 @@ package pget
 import (
 	"context"
 	"fmt"
-	"github.com/ryojiroakiyama/fileio"
 	"os"
 	"strings"
+
+	"github.com/ryojiroakiyama/fileio"
 )
 
-//DivDownLoadMax is the maximum data size
+//ParallelDownLoadMax is the maximum data size
 //that can be downloaded
 //by one of the processes running in parallel.
 const (
-	DivDownLoadMax = 1000
+	ParallelDownLoadMax = 1000
 )
 
 //Do starts the download from the URL passed as a argument.
