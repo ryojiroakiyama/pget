@@ -10,24 +10,24 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-func download(ctx context.Context, url string) ([]string, error) {
+func parallelDownload(ctx context.Context, url string) ([]string, error) {
 	eg, ctx := errgroup.WithContext(ctx)
-	sumSize, err := dataLengthToDownload(url)
+	sumLen, err := dataLengthToDownload(url)
 	if err != nil {
 		return nil, err
 	}
-	divNum := numOfRoutine(sumSize)
-	divSize := sumSize / int64(divNum)
-	downloadedFiles := make([]string, divNum)
-	for i := 0; i < divNum; i++ {
+	nroutine := numOfRoutine(sumLen)
+	eachLen := sumLen / int64(nroutine)
+	downloadedFiles := make([]string, nroutine)
+	for i := 0; i < nroutine; i++ {
 		i := i
 		err := err
 		eg.Go(func() error {
-			minRange, maxRange := rangeToDownload(i, divNum, divSize, sumSize)
+			minRange, maxRange := rangeToDownload(i, nroutine, eachLen, sumLen)
 			select {
 			case <-ctx.Done(): // Receive cancel and do nothing
 			default:
-				downloadedFiles[i], err = divDownload(url, minRange, maxRange)
+				downloadedFiles[i], err = download(url, minRange, maxRange)
 			}
 			return err
 		})
@@ -67,7 +67,7 @@ func rangeToDownload(index int, numDiv int, sizeDiv int64, sizeSum int64) (int64
 	return minRange, maxRange
 }
 
-func divDownload(url string, minRange int64, maxRange int64) (string, error) {
+func download(url string, minRange int64, maxRange int64) (string, error) {
 	content, err := requestWithRange(url, minRange, maxRange)
 	if err != nil {
 		return "", err

@@ -20,7 +20,7 @@ const (
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
 func Do(url string) error {
-	divfiles, err := download(context.Background(), url)
+	divfiles, err := parallelDownload(context.Background(), url)
 	if err != nil {
 		return fmt.Errorf("Do: %v", err)
 	}
