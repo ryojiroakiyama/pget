@@ -48,8 +48,8 @@ func checkUrlInfo(url string) (int64, error) {
 	if length <= 0 {
 		return 0, fmt.Errorf("checkUrlInfo: unknown content length")
 	}
-	if resp.Header.Get("Accept-Ranges") == "server dosen't support partial requests" {
-		return 0, fmt.Errorf("checkUrlInfo: ")
+	if resp.Header.Get("Accept-Ranges") != "bytes" {
+		return 0, fmt.Errorf("checkUrlInfo: server dosen't support partial requests")
 	}
 	return length, nil
 }
