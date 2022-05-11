@@ -12,7 +12,7 @@ import (
 
 func parallelDownload(ctx context.Context, url string) ([]string, error) {
 	eg, ctx := errgroup.WithContext(ctx)
-	sumLen, err := dataLengthToDownload(url)
+	sumLen, err := checkUrlInfo(url)
 	if err != nil {
 		return nil, err
 	}
@@ -39,15 +39,16 @@ func parallelDownload(ctx context.Context, url string) ([]string, error) {
 	return downloadedFiles, nil
 }
 
-func dataLengthToDownload(url string) (int64, error) {
+func checkUrlInfo(url string) (int64, error) {
 	resp, err := http.Head(url)
 	if err != nil {
-		return 0, fmt.Errorf("DataLength: %v", err)
+		return 0, fmt.Errorf("checkUrlInfo: %v", err)
 	}
 	length := resp.ContentLength
 	if length <= 0 {
-		return 0, fmt.Errorf("DataLength: unknown content length")
+		return 0, fmt.Errorf("checkUrlInfo: unknown content length")
 	}
+	fmt.Println("~~~~~~~~~~>", resp.Header.Get("Accept-Ranges"))
 	return length, nil
 }
 
