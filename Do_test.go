@@ -7,6 +7,9 @@ import (
 	"github.com/ryojiroakiyama/pget"
 )
 
+// TODO: Separate Do functions by utilizing interfaces
+// TODO: Do test each functions
+// TODO: Prepare a test web server
 func TestDo(t *testing.T) {
 	type args struct {
 		url string
