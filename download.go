@@ -11,11 +11,11 @@ import (
 )
 
 func parallelDownload(ctx context.Context, url string) ([]string, error) {
-	eg, ctx := errgroup.WithContext(ctx)
 	sumLen, err := checkUrlInfo(url)
 	if err != nil {
 		return nil, err
 	}
+	eg, ctx := errgroup.WithContext(ctx)
 	nroutine := numOfRoutine(sumLen)
 	eachLen := sumLen / int64(nroutine)
 	downloadedFiles := make([]string, nroutine)
