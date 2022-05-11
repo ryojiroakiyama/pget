@@ -17,6 +17,8 @@ const (
 	ParallelDownLoadMaxLen = 1000
 )
 
+// 1466714112
+
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
 func Do(url string) error {

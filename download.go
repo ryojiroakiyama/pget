@@ -48,6 +48,7 @@ func checkUrlInfo(url string) (int64, error) {
 	if length <= 0 {
 		return 0, fmt.Errorf("checkUrlInfo: unknown content length")
 	}
+	// Accept-Ranges value is 'bytes' or 'none' (or omit) define by RFC7233
 	if resp.Header.Get("Accept-Ranges") != "bytes" {
 		return 0, fmt.Errorf("checkUrlInfo: server dosen't support partial requests")
 	}
