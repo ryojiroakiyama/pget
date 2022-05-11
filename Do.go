@@ -25,10 +25,10 @@ func Do(url string) error {
 		return fmt.Errorf("Do: %v", err)
 	}
 	defer func() {
-		for _, d := range files {
-			if d != "" {
-				fmt.Println("remove:", d)
-				os.Remove(d)
+		for _, f := range files {
+			if f != "" {
+				//fmt.Println("remove:", f)
+				os.Remove(f)
 			}
 		}
 	}()
