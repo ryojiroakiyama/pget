@@ -16,12 +16,17 @@ func TestDo(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "not found",
+			args: args{
+				url: "no_such",
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			if err := pget.Do(tt.args.url); (err != nil) != tt.wantErr {
 				t.Errorf("Do() error = %v, wantErr %v", err, tt.wantErr)
 			}
