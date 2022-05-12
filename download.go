@@ -16,7 +16,7 @@ func parallelDownload(ctx context.Context, url string) ([]string, error) {
 		return nil, err
 	}
 	eg, ctx := errgroup.WithContext(ctx)
-	nroutine := numOfRoutine(sumLen)
+	nroutine := numOfRoutine(sumLen, 0)
 	eachLen := sumLen / int64(nroutine)
 	downloadedFiles := make([]string, nroutine)
 	for i := 0; i < nroutine; i++ {
@@ -55,11 +55,14 @@ func checkUrlInfo(url string) (int64, error) {
 	return length, nil
 }
 
-func numOfRoutine(datasize int64) int {
-	if datasize < ParallelDownLoadMaxLen {
+func numOfRoutine(datasize int64, cnt int) int {
+	if datasize < MinBytesToDownload {
 		return 1
 	}
-	return 1 + numOfRoutine(datasize/ParallelDownLoadMaxLen)
+	if MaxParallel <= cnt {
+		return 1
+	}
+	return 1 + numOfRoutine(datasize-MinBytesToDownload, cnt+1)
 }
 
 func rangeToDownload(index int, numDiv int, sizeDiv int64, sizeSum int64) (int64, int64) {

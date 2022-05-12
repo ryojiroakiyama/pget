@@ -10,14 +10,13 @@ import (
 	"github.com/ryojiroakiyama/fileio"
 )
 
-//ParallelDownLoadMaxLen is the maximum data length
-//that can be downloaded
-//by one of the processes running in parallel.
+//MinBytesToDownload is the minimum data length
+//that one of the processes running in parallel downloads.
+//MaxParallel is the limit on the number of goroutine.
 const (
-	ParallelDownLoadMaxLen = 1000
+	MinBytesToDownload = 100000
+	MaxParallel        = 30
 )
-
-// 1466714112
 
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
