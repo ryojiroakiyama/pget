@@ -60,7 +60,7 @@ func numOfRoutine(datasize int64, cnt int) int {
 		return 1
 	}
 	if MaxParallel <= cnt {
-		return 1
+		return 0
 	}
 	return 1 + numOfRoutine(datasize-MinBytesToDownload, cnt+1)
 }
