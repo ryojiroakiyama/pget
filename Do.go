@@ -20,6 +20,7 @@ const (
 
 // NOTE: MaxParallelが15とかだとreadできるバイト数が変になる
 // NOTE: ダウンロードからファイルマージまでの流れの高速化がもうわからん
+// 試したのはtmpfileを通さずio.Readerの状態で持っておくこと->これやるなら各goroutineでdstfileにappendしないとかも
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
 func Do(url string) error {
