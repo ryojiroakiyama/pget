@@ -14,8 +14,8 @@ import (
 //that one of the processes running in parallel downloads.
 //MaxParallel is the limit on the number of goroutine.
 const (
-	MinBytesToDownload = 100000
-	MaxParallel        = 30
+	MinBytesToDownload = 1000000
+	MaxParallel        = 100
 )
 
 //Do starts the download from the URL passed as a argument.

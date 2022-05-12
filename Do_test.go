@@ -29,21 +29,21 @@ func TestDo(t *testing.T) {
 			wantErr:  false,
 			wantFile: "en.norm.pdf",
 		},
-		//{
-		//	name: "big file",
-		//	args: args{
-		//		url: "https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso",
-		//		// compare with 'curl -o tmp https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso'
-		//	},
-		//	wantErr:  false,
-		//	wantFile: "ubuntu-22.04-live-server-amd64.iso",
-		//},
 		{
 			name: "not found",
 			args: args{
 				url: "no_such",
 			},
 			wantErr: true,
+		},
+		{
+			name: "big file",
+			args: args{
+				url: "https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso",
+				// compare with 'curl -o tmp https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso'
+			},
+			wantErr:  false,
+			wantFile: "ubuntu-22.04-live-server-amd64.iso",
 		},
 	}
 	for _, tt := range tests {
