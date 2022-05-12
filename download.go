@@ -56,11 +56,11 @@ func checkUrlInfo(url string) (int64, error) {
 }
 
 func numOfRoutine(datasize int64, cnt int) int {
-	if datasize < MinBytesToDownload {
-		return 1
-	}
 	if MaxParallel <= cnt {
 		return 0
+	}
+	if datasize < MinBytesToDownload {
+		return 1
 	}
 	return 1 + numOfRoutine(datasize-MinBytesToDownload, cnt+1)
 }
