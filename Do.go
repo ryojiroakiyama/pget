@@ -18,6 +18,8 @@ const (
 	MaxParallel        = 10
 )
 
+// NOTE: MaxParallelが15とかだとreadできるバイト数が変になる
+// NOTE: ダウンロードからファイルマージまでの流れの高速化がもうわからん
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
 func Do(url string) error {
