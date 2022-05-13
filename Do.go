@@ -15,7 +15,7 @@ import (
 //MaxParallel is the limit on the number of goroutine.
 const (
 	MinBytesToDownload = 1000000
-	MaxParallel        = 10
+	MaxParallel        = 4
 )
 
 // NOTE: MaxParallelが15とかだとレスポンスのバイト数が変になる, そもそも10でも多すぎるかも
