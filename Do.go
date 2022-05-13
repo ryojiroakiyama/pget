@@ -18,8 +18,9 @@ const (
 	MaxParallel        = 10
 )
 
-// NOTE: MaxParallelが15とかだとreadできるバイト数が変になる
-// NOTE: ダウンロードからファイルマージまでの流れの高速化がもうわからん
+// NOTE: MaxParallelが15とかだとレスポンスのバイト数が変になる, そもそも10でも多すぎるかも
+// NOTE: どうやらio.Copyでresp.Bodyから読み込むのに時間かかってそう
+// NOTE: pgetを読み込む
 // 試したのはtmpfileを通さずio.Readerの状態で持っておくこと->これやるなら各goroutineでdstfileにappendしないとかも
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.

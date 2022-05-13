@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+var client = &http.Client{}
+
 func rangeValue(start int64, end int64) string {
 	return "bytes=" + strconv.FormatInt(start, 10) + "-" + strconv.FormatInt(end, 10)
 }
@@ -17,7 +19,6 @@ func requestWithRange(url string, minRange int64, maxRange int64) (io.ReadCloser
 		return nil, fmt.Errorf("fail to send request: %v", err)
 	}
 	req.Header.Add("Range", rangeValue(minRange, maxRange-1))
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get response: %v", err)
