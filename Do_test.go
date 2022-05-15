@@ -39,8 +39,8 @@ func TestDo(t *testing.T) {
 		//{
 		//	name: "big file",
 		//	args: args{
-		//		url: "https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso",
-		//		// compare with 'curl -o tmp https://ftp.riken.jp/Linux/ubuntu-releases/22.04/ubuntu-22.04-live-server-amd64.iso'
+		//		url: "https://releases.ubuntu.com/focal/ubuntu-20.04.4-live-server-amd64.iso",
+		//		// compare with 'curl -o tmp https://releases.ubuntu.com/focal/ubuntu-20.04.4-live-server-amd64.iso'
 		//	},
 		//	wantErr:  false,
 		//	wantFile: "ubuntu-22.04-live-server-amd64.iso",
