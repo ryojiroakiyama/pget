@@ -40,7 +40,7 @@ func TestDo(t *testing.T) {
 		//	name: "big file",
 		//	args: args{
 		//		url: "https://releases.ubuntu.com/focal/ubuntu-20.04.4-live-server-amd64.iso",
-		//		// compare with 'curl -o tmp https://releases.ubuntu.com/focal/ubuntu-20.04.4-live-server-amd64.iso'
+		//		// compare with 'time curl -o from_curl https://releases.ubuntu.com/focal/ubuntu-20.04.4-live-server-amd64.iso -k'
 		//	},
 		//	wantErr:  false,
 		//	wantFile: "ubuntu-22.04-live-server-amd64.iso",
