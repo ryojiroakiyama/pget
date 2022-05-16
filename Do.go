@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/ryojiroakiyama/fileio"
@@ -12,11 +13,10 @@ import (
 
 //MinBytesToDownload is the minimum data length
 //that one of the processes running in parallel downloads.
+const MinBytesToDownload = 1 << 7
+
 //MaxParallel is the limit on the number of goroutine.
-const (
-	MinBytesToDownload = 1 << 6
-	MaxParallel        = 4
-)
+var MaxParallel = runtime.NumCPU()
 
 //Do starts the download from the URL passed as a argument.
 //Download process is excuted in parallel.
