@@ -32,7 +32,6 @@ func parallelDownload(ctx context.Context, url string) ([]string, error) {
 			return err
 		})
 	}
-	// Wait() catch error by Go() if occured, and run the cancellation
 	if err := eg.Wait(); err != nil {
 		return nil, err
 	}
