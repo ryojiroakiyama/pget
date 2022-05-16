@@ -13,7 +13,7 @@ func rangeValue(start int64, end int64) string {
 	return "bytes=" + strconv.FormatInt(start, 10) + "-" + strconv.FormatInt(end, 10)
 }
 
-// NOTE: rangeの区切りを15個にすると503エラー(サーバが過負荷などで処理できない)
+// NOTE: rangeの区切りを15個以上にすると503エラー(サーバが過負荷などで処理できない)
 func requestWithRange(url string, minRange int64, maxRange int64) (io.ReadCloser, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

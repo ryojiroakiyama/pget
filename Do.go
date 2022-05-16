@@ -14,7 +14,7 @@ import (
 //that one of the processes running in parallel downloads.
 //MaxParallel is the limit on the number of goroutine.
 const (
-	MinBytesToDownload = 1000000
+	MinBytesToDownload = 1 << 7
 	MaxParallel        = 4
 )
 
