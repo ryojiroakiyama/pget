@@ -13,7 +13,7 @@ import (
 
 //MinBytesToDownload is the minimum data length
 //that one of the processes running in parallel downloads.
-const MinBytesToDownload = 1 << 7
+const MinBytesToDownload = 10000000
 
 //MaxParallel is the limit on the number of goroutine.
 var MaxParallel = runtime.NumCPU()

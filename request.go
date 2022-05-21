@@ -24,6 +24,7 @@ func requestWithRange(url string, minRange int64, maxRange int64) (io.ReadCloser
 	if err != nil {
 		return nil, fmt.Errorf("fail to get response: %v", err)
 	}
+	// Rangeでアクセスすれば一度に全てダウンロードしてもステータスはStatusPartialContentで返ってくる
 	if resp.StatusCode != http.StatusPartialContent {
 		resp.Body.Close()
 		return nil, fmt.Errorf("response statuscode : %v", resp.StatusCode)
